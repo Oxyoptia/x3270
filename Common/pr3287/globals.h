@@ -102,9 +102,6 @@ extern const char *cyear;
 # define EBCDIC_HOST 1
 #endif /*]*/
 
-/* Handy stuff. */
-#define array_count(a)	sizeof(a)/sizeof(a[0])
-
 /* Doubly-linked lists. */
 typedef struct llist {
     struct llist *next;
