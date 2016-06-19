@@ -2757,7 +2757,7 @@ screen_register(void)
     };
 
     /* Register the toggles. */
-    register_toggles(toggles, array_count(toggles));
+    register_toggles(toggles, ARRAY_SIZE(toggles));
 
     /* Register for state changes. */
     register_schange(ST_CONNECT, screen_connect);
@@ -2767,5 +2767,5 @@ screen_register(void)
     register_schange(ST_PRINTER, status_printer);
 
     /* Register the actions. */
-    register_actions(screen_actions, array_count(screen_actions));
+    register_actions(screen_actions, ARRAY_SIZE(screen_actions));
 }

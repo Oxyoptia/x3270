@@ -1233,5 +1233,5 @@ menubar_register(void)
     };
 
     /* Register our actions. */
-    register_actions(menubar_actions, array_count(menubar_actions));
+    register_actions(menubar_actions, ARRAY_SIZE(menubar_actions));
 }

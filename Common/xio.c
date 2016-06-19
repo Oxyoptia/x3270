@@ -182,5 +182,5 @@ xio_register(void)
     };
 
     /* Register our actions. */
-    register_actions(xio_actions, array_count(xio_actions));
+    register_actions(xio_actions, ARRAY_SIZE(xio_actions));
 }

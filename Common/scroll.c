@@ -482,5 +482,5 @@ scroll_register(void)
     };
 
     /* Register the actions. */
-    register_actions(scroll_actions, array_count(scroll_actions));
+    register_actions(scroll_actions, ARRAY_SIZE(scroll_actions));
 }

@@ -401,5 +401,5 @@ help_register(void)
     };
 
     /* Register the actions. */
-    register_actions(help_actions, array_count(help_actions));
+    register_actions(help_actions, ARRAY_SIZE(help_actions));
 }

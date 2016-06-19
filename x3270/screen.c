@@ -6371,10 +6371,10 @@ screen_register(void)
     };
 
     /* Register our toggles. */
-    register_toggles(toggles, array_count(toggles));
+    register_toggles(toggles, ARRAY_SIZE(toggles));
 
     /* Register our actions. */
-    register_actions(screen_actions, array_count(screen_actions));
+    register_actions(screen_actions, ARRAY_SIZE(screen_actions));
 
     /* Register state change callbacks. */
     register_schange(ST_HALF_CONNECT, screen_connect);

@@ -201,7 +201,7 @@ toggles_register(void)
     register_schange(ST_EXITING, toggle_exiting);
 
     /* Register the actions. */
-    register_actions(toggle_actions, array_count(toggle_actions));
+    register_actions(toggle_actions, ARRAY_SIZE(toggle_actions));
 }
 
 /**

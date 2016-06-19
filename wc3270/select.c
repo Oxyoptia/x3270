@@ -960,5 +960,5 @@ select_register(void)
 	{ "SelectUp",	SelectUp_action,	ACTION_KE }
     };
 
-    register_actions(select_actions, array_count(select_actions));
+    register_actions(select_actions, ARRAY_SIZE(select_actions));
 }

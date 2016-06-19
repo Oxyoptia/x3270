@@ -1818,15 +1818,15 @@ tcl3270_register(void)
     };
 
     /* Register our toggles. */
-    register_toggles(toggles, array_count(toggles));
+    register_toggles(toggles, ARRAY_SIZE(toggles));
 
     /* Register for state changes. */
     register_schange(ST_CONNECT, tcl3270_connect);
     register_schange(ST_3270_MODE, tcl3270_connect);
 
     /* Register our actions. */
-    register_actions(actions, array_count(actions));
+    register_actions(actions, ARRAY_SIZE(actions));
 
     /* Register our resources. */
-    register_resources(tcl3270_resources, array_count(tcl3270_resources));
+    register_resources(tcl3270_resources, ARRAY_SIZE(tcl3270_resources));
 }

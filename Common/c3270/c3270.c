@@ -1923,12 +1923,12 @@ c3270_register(void)
     register_schange(ST_EXITING, main_exiting);
 
     /* Register our actions. */
-    register_actions(actions, array_count(actions));
+    register_actions(actions, ARRAY_SIZE(actions));
 
     /* Register our options. */
-    register_opts(c3270_opts, array_count(c3270_opts));
+    register_opts(c3270_opts, ARRAY_SIZE(c3270_opts));
 
     /* Register our resources. */
-    register_resources(c3270_resources, array_count(c3270_resources));
-    register_xresources(c3270_xresources, array_count(c3270_xresources));
+    register_resources(c3270_resources, ARRAY_SIZE(c3270_resources));
+    register_xresources(c3270_xresources, ARRAY_SIZE(c3270_xresources));
 }

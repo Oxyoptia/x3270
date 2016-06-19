@@ -602,7 +602,7 @@ typedef struct optlist {
     opt_t *opts;
     unsigned count;
 } optlist_t;
-static optlist_t first_optlist = { NULL, base_opts, array_count(base_opts) };
+static optlist_t first_optlist = { NULL, base_opts, ARRAY_SIZE(base_opts) };
 static optlist_t *optlist = &first_optlist;
 static optlist_t **last_optlist = &first_optlist.next;
 
@@ -1081,7 +1081,7 @@ typedef struct reslist {
     unsigned count;
 } reslist_t;
 static reslist_t first_reslist = {
-    NULL, base_resources, array_count(base_resources)
+    NULL, base_resources, ARRAY_SIZE(base_resources)
 };
 static reslist_t *reslist = &first_reslist;
 static reslist_t **last_reslist = &first_reslist.next;

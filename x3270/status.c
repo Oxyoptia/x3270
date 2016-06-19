@@ -72,7 +72,7 @@ static int offsets[] = {
 	39,	/* shift, insert, timing, cursor position */
 	-1
 };
-#define SSZ (array_count(offsets) - 1)
+#define SSZ (ARRAY_SIZE(offsets) - 1)
 
 #define CTLR_REGION	0
 #define WAIT_REGION	1

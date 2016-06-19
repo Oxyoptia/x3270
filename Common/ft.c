@@ -178,7 +178,7 @@ ft_register(void)
     register_schange(ST_3270_MODE, ft_in3270);
 
     /* Register actions. */
-    register_actions(ft_actions, array_count(ft_actions));
+    register_actions(ft_actions, ARRAY_SIZE(ft_actions));
 }
 
 /* Encode/decode for host type. */

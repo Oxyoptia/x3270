@@ -215,5 +215,5 @@ print_window_register(void)
     };
 
     /* Register the actions. */
-    register_actions(print_window_actions, array_count(print_window_actions));
+    register_actions(print_window_actions, ARRAY_SIZE(print_window_actions));
 }

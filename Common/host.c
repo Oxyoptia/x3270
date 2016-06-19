@@ -228,7 +228,7 @@ host_register(void)
     register_schange(ST_EXITING, host_exiting);
 
     /* Register our actions. */
-    register_actions(host_actions, array_count(host_actions));
+    register_actions(host_actions, ARRAY_SIZE(host_actions));
 }
 
 /**

@@ -368,9 +368,9 @@ s3270_register(void)
     register_schange(ST_3270_MODE, s3270_connect);
 
     /* Register our options. */
-    register_opts(s3270_opts, array_count(s3270_opts));
+    register_opts(s3270_opts, ARRAY_SIZE(s3270_opts));
 
     /* Register our resources. */
-    register_resources(s3270_resources, array_count(s3270_resources));
-    register_xresources(s3270_xresources, array_count(s3270_xresources));
+    register_resources(s3270_resources, ARRAY_SIZE(s3270_resources));
+    register_xresources(s3270_xresources, ARRAY_SIZE(s3270_xresources));
 }

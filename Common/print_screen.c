@@ -446,5 +446,5 @@ print_screen_register(void)
     };
 
     /* Register the actions. */
-    register_actions(print_text_actions, array_count(print_text_actions));
+    register_actions(print_text_actions, ARRAY_SIZE(print_text_actions));
 }

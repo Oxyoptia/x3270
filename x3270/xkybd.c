@@ -562,5 +562,5 @@ xkybd_register(void)
     };
 
     /* Register the actions. */
-    register_actions(xkybd_actions, array_count(xkybd_actions));
+    register_actions(xkybd_actions, ARRAY_SIZE(xkybd_actions));
 }

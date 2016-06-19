@@ -380,13 +380,13 @@ macros_register(void)
     register_schange_ordered(ST_3270_MODE, sms_in3270, 2000);
 
     /* Register actions.*/
-    register_actions(macros_actions, array_count(macros_actions));
+    register_actions(macros_actions, ARRAY_SIZE(macros_actions));
     if (product_has_display()) {
-	register_actions(macros_dactions, array_count(macros_dactions));
+	register_actions(macros_dactions, ARRAY_SIZE(macros_dactions));
     }
 
     /* Register toggles. */
-    register_toggles(toggles, array_count(toggles));
+    register_toggles(toggles, ARRAY_SIZE(toggles));
 }
 
 /* Parse the macros resource into the macro list */

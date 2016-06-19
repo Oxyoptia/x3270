@@ -85,8 +85,8 @@ static unsigned char pf_xlate[] = {
 static unsigned char pa_xlate[] = { 
 	AID_PA1, AID_PA2, AID_PA3
 };
-#define PF_SZ	array_count(pf_xlate)
-#define PA_SZ	array_count(pa_xlate)
+#define PF_SZ	ARRAY_SIZE(pf_xlate)
+#define PA_SZ	ARRAY_SIZE(pa_xlate)
 static ioid_t unlock_id = NULL_IOID;
 static time_t unlock_delay_time;
 static bool key_Character(unsigned ebc, bool with_ge, bool pasting);
@@ -612,15 +612,15 @@ kybd_register(void)
     register_schange_ordered(ST_3270_MODE, kybd_in3270, 1000);
 
     /* Register the actions. */
-    register_actions(kybd_actions, array_count(kybd_actions));
+    register_actions(kybd_actions, ARRAY_SIZE(kybd_actions));
 
     /* Register the interactive actions. */
     if (product_has_display()) {
-	register_actions(kybd_dactions, array_count(kybd_dactions));
+	register_actions(kybd_dactions, ARRAY_SIZE(kybd_dactions));
     }
 
     /* Register the toggles. */
-    register_toggles(toggles, array_count(toggles));
+    register_toggles(toggles, ARRAY_SIZE(toggles));
 }
 
 /*

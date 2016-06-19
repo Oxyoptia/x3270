@@ -1117,7 +1117,7 @@ popups_register(void)
     };
 
     /* Register actions. */
-    register_actions(popup_actions, array_count(popup_actions));
+    register_actions(popup_actions, ARRAY_SIZE(popup_actions));
 
     /* Register for status change notifications. */
     register_schange(ST_EXITING, dump_errmsgs);

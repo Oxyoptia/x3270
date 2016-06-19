@@ -1063,7 +1063,7 @@ keymap_register(void)
     register_schange(ST_CONNECT, keymap_3270_mode);
 
     /* Register the actions. */
-    register_actions(keymap_actions, array_count(keymap_actions));
+    register_actions(keymap_actions, ARRAY_SIZE(keymap_actions));
 }
 
 /* Read each of the keymaps specified by the keymap resource. */

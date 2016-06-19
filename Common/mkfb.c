@@ -78,7 +78,7 @@ struct {
     { "X3270_DBCS", MODE_DBCS },
     { "_WIN32", MODE__WIN32 }
 };
-#define NPARTS	array_count(parts)
+#define NPARTS	ARRAY_SIZE(parts)
 
 unsigned long is_defined =
     MODE_COLOR | MODE_APL |

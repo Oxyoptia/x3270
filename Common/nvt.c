@@ -1759,7 +1759,7 @@ nvt_send_pf(int nn)
 	35, 36, 37, 38
     };
 
-    if (nn < 1 || (unsigned)nn > array_count(code)) {
+    if (nn < 1 || (unsigned)nn > ARRAY_SIZE(code)) {
 	return;
     }
     s = xs_buffer("\033[%d~", code[nn-1]);
@@ -2363,7 +2363,7 @@ nvt_register(void)
     };
 
     /* Register our toggles. */
-    register_toggles(toggles, array_count(toggles));
+    register_toggles(toggles, ARRAY_SIZE(toggles));
 
     /* Register for state changes. */
     register_schange(ST_3270_MODE, nvt_in3270);

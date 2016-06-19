@@ -1799,5 +1799,5 @@ select_register(void)
 	{ RECTANGLE_SELECT,	NULL,	0 }
     };
 
-    register_toggles(toggles, array_count(toggles));
+    register_toggles(toggles, ARRAY_SIZE(toggles));
 }

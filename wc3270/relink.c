@@ -95,7 +95,7 @@ charsets_t charsets[] = {
     { NULL,		NULL,	0, NULL	}
 };
 
-size_t num_charsets = (array_count(charsets)) - 1;
+size_t num_charsets = (ARRAY_SIZE(charsets)) - 1;
 
 /*  2             3             4             5                 */
 int wrows[6] = { 0, 0,

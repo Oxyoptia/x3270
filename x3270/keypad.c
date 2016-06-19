@@ -128,7 +128,7 @@ static struct button_list pf_list[] = {
     { "PF11",           Lg, NULL, 0, 0, "PF",       "11" },
     { "PF12",           Lg, NULL, 0, 0, "PF",       "12" }
 };
-#define PF_SZ array_count(pf_list)
+#define PF_SZ ARRAY_SIZE(pf_list)
 
 static struct button_list pad_list[] = {
     { "PA1",            Lg, NULL, 0, 0, "PA",       "1" },
@@ -149,7 +149,7 @@ static struct button_list pad_list[] = {
                                       "Down",     NULL },
     { 0, 0, 0, 0 },
 };
-#define PAD_SZ array_count(pad_list)
+#define PAD_SZ ARRAY_SIZE(pad_list)
 
 static struct button_list lower_list[] = {
     { "Clear",          Sm, NULL, 0, 0, "Clear",    NULL },
@@ -174,7 +174,7 @@ static struct button_list lower_list[] = {
 				      "Newline",  NULL },
     { "Enter",          Sm, NULL, 0, 0, "Enter",    NULL }
 };
-#define LOWER_SZ array_count(lower_list)
+#define LOWER_SZ ARRAY_SIZE(lower_list)
 
 static struct button_list vpf_list[] = {
     { "PF1",            Lg, NULL, 0, 0, "PF",       "1" },
@@ -190,7 +190,7 @@ static struct button_list vpf_list[] = {
     { "PF11",           Lg, NULL, 0, 0, "PF",       "11" },
     { "PF12",           Lg, NULL, 0, 0, "PF",       "12" },
 };
-#define VPF_SZ array_count(vpf_list)
+#define VPF_SZ ARRAY_SIZE(vpf_list)
 
 static struct button_list vspf_list[] = {
     { "PF13",           Lg, NULL, 0, 0, "PF",       "13" },
@@ -229,7 +229,7 @@ static struct button_list vpad_list[] = {
     { "PA2",            Lg, NULL, 0, 0, "PA",       "2" },
     { "PA3",            Lg, NULL, 0, 0, "PA",       "3" },
 };
-#define VPAD_SZ array_count(vpad_list)
+#define VPAD_SZ ARRAY_SIZE(vpad_list)
 
 static struct button_list vfn_list[] = {
     { "Btab",           Bm, (char *)btab_bits, btab_width, btab_height,
@@ -250,7 +250,7 @@ static struct button_list vfn_list[] = {
 				      "Newline",  NULL },
     { "Enter",          Sm, NULL, 0, 0, "Enter",    NULL },
 };
-#define VFN_SZ array_count(vfn_list)
+#define VFN_SZ ARRAY_SIZE(vfn_list)
 
 static Dimension pf_width;
 static Dimension key_height;

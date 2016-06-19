@@ -1263,5 +1263,5 @@ trace_register(void)
 	  TOGGLE_NEED_INIT | TOGGLE_NEED_CLEANUP }
     };
 
-    register_toggles(toggles, array_count(toggles));
+    register_toggles(toggles, ARRAY_SIZE(toggles));
 }

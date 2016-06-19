@@ -69,8 +69,8 @@ typedef struct {
 
 /* Pull in the compiled keypad structures (sens, keypad_desc). */
 #include "compiled_keypad.h"
-#define KEYPAD_HEIGHT	array_count(keypad_desc)
-#define NUM_SENSE	array_count(sens)
+#define KEYPAD_HEIGHT	ARRAY_SIZE(keypad_desc)
+#define NUM_SENSE	ARRAY_SIZE(sens)
 
 static sens_t *current_sens = NULL;
 #if defined(XXX_DEBUG) || defined(YYY_DEBUG) || defined(ZZZ_DEBUG)
@@ -525,5 +525,5 @@ keypad_register(void)
     };
 
     /* Register the actions. */
-    register_actions(keypad_actions, array_count(keypad_actions));
+    register_actions(keypad_actions, ARRAY_SIZE(keypad_actions));
 }
