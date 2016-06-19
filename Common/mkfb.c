@@ -99,8 +99,8 @@ char *me;
 
 void emit(FILE *t, int ix, char c);
 
-void
-usage(void)
+static void
+usage_(void)
 {
     fprintf(stderr, "usage: %s [-c] [-o outfile] [infile...]\n",
 	    me);
@@ -174,12 +174,12 @@ main(int argc, char *argv[])
 	    cmode = 1;
 	} else if (!strcmp(argv[ix], "-o")) {
 	    if (argc < ix + 1) {
-		usage();
+		usage_();
 	    }
 	    ix++;
 	    ofile = argv[ix];
 	} else {
-	    usage();
+	    usage_();
 	}
     }
     infiles = argc - ix;
