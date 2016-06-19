@@ -35,6 +35,7 @@
 
 #include <stdio.h>
 
+#include "globals.h"
 #include "conf.h"
 #if defined(_WIN32) /*[*/
 # include "wincmn.h"
