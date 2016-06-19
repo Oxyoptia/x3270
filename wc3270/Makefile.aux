@@ -1,0 +1,109 @@
+# Copyright (c) 1995-2015 Paul Mattes.
+# All rights reserved.
+# 
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of Paul Mattes nor his contributors may be used
+#       to endorse or promote products derived from this software without
+#       specific prior written permission.
+# 
+# THIS SOFTWARE IS PROVIDED BY PAUL MATTES "AS IS" AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+# NO EVENT SHALL PAUL MATTES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+# TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+# LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# Auxiliary makefile for wc3270
+
+PRODUCT = wc3270
+
+all:
+	@echo "Must pick a specific make target."
+
+DOCS = LICENSE.txt html/$(PRODUCT)-man.html html/ReleaseNotes.html \
+	html/Resources.html html/SSL.html html/wc3270-script.html
+
+src.tgz: $(DOCS) wc3270.iss Makefile.aux
+
+MANDEP = html.m4 m4man Makefile.aux version.txt
+MKHTML = ./m4man -t html -p $(PRODUCT)
+
+# Rule for building the documentation.
+man: $(DOCS)
+
+# Rules for building man pages and derived HTML documentation.
+html/$(PRODUCT)-man.html: x3270.man.m4 ft.inc resources.inc hostname.inc \
+    	keymaps.inc $(MANDEP)
+	$(MKHTML) -n $(PRODUCT) -o $@ x3270.man.m4
+html/ReleaseNotes.html: html/documentation-relnotes-body.html mkstand.bash
+	./mkstand.bash "$(PRODUCT) Release Notes" html/documentation-relnotes-body.html $@
+html/wc3270-script.html: x3270-script.man.m4 ft.inc $(MANDEP)
+	$(MKHTML) -n wc3270-script -o $@ x3270-script.man.m4
+html/Resources.html: resource-body make-resource-doc.pl version.txt
+	./make-resource-doc.pl -o $@ $(PRODUCT) <resource-body
+
+# Special rule to build the SSL documentation, which comes from a template.
+html/SSL.html: documentation-ssl-body.html mkstand.bash
+	./mkstand.bash "$(PRODUCT) and SSL" documentation-ssl-body.html $@
+documentation-ssl-body.html: documentation-ssl-body.tmpl dll-subst.sh \
+	openssl-url.txt
+	./dll-subst.sh <documentation-ssl-body.tmpl >$@
+
+wc3270.iss: version.txt wc3270.iss.tmpl mkiss
+	./mkiss <wc3270.iss.tmpl >wc3270.iss
+
+LICENSE.txt: version.txt LICENSE.txt.tmpl mkiss
+	./mkiss <LICENSE.txt.tmpl >LICENSE.txt
+
+# Generate the Inno Setup .exe and the no-install zip file.
+# This depends on external targets, and is intended to be built recursively
+# from the top-level Makefile, which builds those targets first.
+VERSION = $(shell . ./version.txt && echo $$version)
+release-files: wc3270-$(VERSION)-setup.exe wc3270-$(VERSION)-noinstall-32.zip wc3270-$(VERSION)-noinstall-64.zip
+windows-release: release-files
+	$(RM) /tmp/pass
+
+# Sign the binaries using ksign.
+SIGNFILES = $(shell awk '/Source:.*exe/ { print substr($$2,2,length($$2)-3) }' *.iss.tmpl | sed 's-\\-\\\\-g')
+CERT = z:\\hd\\xfer\\Certificate.p12
+PASS = /p `cat /tmp/pass`
+sign-files:
+	./readpass
+	@(echo '@echo off'; \
+	 for i in $(SIGNFILES); \
+	    do /bin/echo -E "\"C:\\Program Files\\ksign\\ksigncmd.exe\" /f $(CERT) /p `sed 's/%/%%/' /tmp/pass` $$i"; \
+	       /bin/echo "if errorlevel 1 ("; \
+	       /bin/echo "    goto :EOF"; \
+	       /bin/echo ")"; \
+	       /bin/echo -E "echo ==== $$i ===="; \
+	done) >/tmp/sign.bat
+	wine cmd /c Z:\\tmp\\sign.bat
+	$(RM) /tmp/sign.bat
+
+# Rule for building the Inno Setup .exe file, deriving dependencies from the
+# .iss.tmpl file.
+ISSDEP = $(shell awk '/Source:/ { print substr($$2,2,length($$2)-3) }' *.iss.tmpl | sed 's-\\-/-g')
+wc3270-$(VERSION)-setup.exe: $(ISSDEP) wc3270.iss Makefile.aux sign-files
+	wine C:\\Program\ Files\\Inno\ Setup\ 5\\ISCC.EXE \
+	    /smystandard="C:\\Program Files\\ksign\\ksigncmd.exe /f $(CERT) $(PASS) \$$p" \
+	    wc3270.iss
+
+# Rule for building the noinstall.zip file, deriving dependencies from the
+# .zipit file.
+ZIPITDEP32 = $(shell awk '/^F/ { print $$2; }' wc3270-32.zipit)
+wc3270-$(VERSION)-noinstall-32.zip: $(ZIPITDEP32) wc3270-32.zipit version.txt Makefile.aux sign-files
+	./zipit -c "wc3270 $(VERSION)" -o wc3270-$(VERSION)-noinstall-32.zip wc3270-32.zipit
+ZIPITDEP64 = $(shell awk '/^F/ { print $$2; }' wc3270-64.zipit)
+wc3270-$(VERSION)-noinstall-64.zip: $(ZIPITDEP64) wc3270-64.zipit version.txt Makefile.aux sign-files
+	./zipit -c "wc3270 $(VERSION)" -o wc3270-$(VERSION)-noinstall-64.zip wc3270-64.zipit

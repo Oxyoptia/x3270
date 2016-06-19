@@ -1,0 +1,113 @@
+# Copyright (c) 2007-2009, 2013-2016 Paul Mattes.
+# All rights reserved.
+# 
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of Paul Mattes nor his contributors may be used
+#       to endorse or promote products derived from this software without
+#       specific prior written permission.
+# 
+# THIS SOFTWARE IS PROVIDED BY PAUL MATTES "AS IS" AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+# NO EVENT SHALL PAUL MATTES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+# TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+# LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# Makefile for wc3270
+
+# Set SSLDIR, SSLCPP, SSLLIB, GT_PFX, NATIVE_SFX, NATIVECC, CC, WINDRES and
+#  WIN32_FLAGS.
+include winenv.mk
+
+MKFB = mkfb$(NATIVE_SFX)
+MKKEYPAD = mkkeypad$(NATIVE_SFX)
+
+XCPPFLAGS = $(WIN32_FLAGS) -I. -I$(THIS) -I$(TOP)/Common/c3270 -I$(TOP)/Common -I$(TOP)/include
+CFLAGS = $(EXTRA_FLAGS) -g -Wall -Werror -MMD -MP $(XCPPFLAGS) $(SSLCPP)
+
+OBJ = o
+ifdef WIN64
+HOST = win64
+else
+HOST = win32
+endif
+W = w
+include $(THIS)/wc3270_files.mk libs.mk
+
+VOBJS = $(WC3270_OBJECTS) fallbacks.o wc3270res.o
+
+OBJECTS = $(VOBJS) version.o
+WOBJECTS = wizard.o wc3270res.o wversion.o shortcut.o relink.o
+LIBS = $(SSLLIB) -lws2_32 -lole32 -luuid -lcomdlg32 -lgdi32 -lwinspool
+SHRTLIBS = $(LD32XX) -lole32 -luuid
+WIZLIBS = $(LD32XX) -lole32 -luuid -lwinspool
+DLLFLAGS = $(EXTRA_FLAGS) -mno-cygwin -shared -Wl,--export-all-symbols -Wl,--enable-auto-import
+
+PROGS = wc3270.exe mkshort.exe wc3270wiz.exe catf.exe
+all: $(PROGS) root_certs.txt
+
+wc3270.exe : XCPPFLAGS += -DWIN32_LEAN_AND_MEAN
+
+version.o: mkversion.sh $(VOBJS) version.txt
+	$(RM) xversion.c
+	sh $< wc3270 $(filter %.txt,$^) >xversion.c
+	$(CC) $(CFLAGS) -c -o $@ xversion.c
+	$(RM) xversion.c
+
+FALLBACKS = fb-common fb-printSession fb-messages fb-composeMap fb-c3270
+fallbacks.c: $(MKFB) $(FALLBACKS)
+	$(RM) $@
+	./$(MKFB) -c -o $@ $(filter-out $(MKFB),$^)
+
+$(MKFB): mkfb.c
+	$(NATIVECC) -DFOR_WIN32 -MMD -MP -I$(THIS) -o $@ $^
+
+keypad.o: keypad.c compiled_keypad.h
+
+compiled_keypad.h: keypad.full keypad.labels keypad.map keypad.outline keypad.callbacks $(MKKEYPAD)
+	./$(MKKEYPAD) -I$(TOP)/Common/c3270 >$@
+
+$(MKKEYPAD): mkkeypad.c
+	$(NATIVECC) -MMD -MP -I$(THIS) -o $@ $^
+
+wc3270res.o: wc3270.rc wc3270.ico wc3270km.ico
+	$(WINDRES) -i $< -o $@
+
+wc3270.exe: $(OBJECTS) Makefile $(DEP3270) $(DEP3270I) $(DEP3270STUBS) $(DEP32XX)
+	$(CC) -o wc3270.exe $(CFLAGS) $(OBJECTS) $(LD3270) $(LD3270I) $(LD32XX) $(LD3270STUBS) $(LIBS)
+
+root_certs.txt: root_certs.txt.in
+	@$(RM) $@
+	cp $< $@
+
+mkshort.exe: mkshort.o shortcut.o $(DEP32XX)
+	$(CC) -o mkshort.exe $(CFLAGS) mkshort.o shortcut.o $(SHRTLIBS)
+
+wversion.o: mkwversion.sh version.txt
+	sh $< $(CC) $(filter %.txt,$^)
+
+wc3270wiz.exe: $(WOBJECTS) $(DEP32XX)
+	$(CC) -o wc3270wiz.exe $(CFLAGS) $(WOBJECTS) $(WIZLIBS)
+
+catf.exe: catf.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+clean:
+	rm -f *.o $(MKFB) $(MKKEYPAD) compiled_keypad.h fallbacks.c
+
+clobber: clean
+	rm -f $(PROGS) *.d
+
+# Include auto-generated dependencies.
+-include $(OBJS:.o=.d) mkbf.d mkkeypad.d wc3270wiz.d
