@@ -85,8 +85,8 @@ static unsigned char pf_xlate[] = {
 static unsigned char pa_xlate[] = { 
 	AID_PA1, AID_PA2, AID_PA3
 };
-#define PF_SZ	(sizeof(pf_xlate)/sizeof(pf_xlate[0]))
-#define PA_SZ	(sizeof(pa_xlate)/sizeof(pa_xlate[0]))
+#define PF_SZ	array_count(pf_xlate)
+#define PA_SZ	array_count(pa_xlate)
 static ioid_t unlock_id = NULL_IOID;
 static time_t unlock_delay_time;
 static bool key_Character(unsigned ebc, bool with_ge, bool pasting);

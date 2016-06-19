@@ -1759,7 +1759,7 @@ nvt_send_pf(int nn)
 	35, 36, 37, 38
     };
 
-    if (nn < 1 || (unsigned)nn > sizeof(code)/sizeof(code[0])) {
+    if (nn < 1 || (unsigned)nn > array_count(code)) {
 	return;
     }
     s = xs_buffer("\033[%d~", code[nn-1]);

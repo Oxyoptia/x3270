@@ -242,8 +242,8 @@ ssl_dll_init(void)
 	}
 
 	/* Resolve each of the symbols. */
-	if (sizeof(ssl_dll_name)/sizeof(ssl_dll_name[0]) !=
-	    sizeof(ssl_dll_func)/sizeof(ssl_dll_func[0])) {
+	if (array_count(ssl_dll_name) !=
+	    array_count(ssl_dll_func)) {
 		abort();
 	}
 	for (i = 0; i < NUM_DLL_FUNCS; i++) {

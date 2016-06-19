@@ -69,8 +69,8 @@ typedef struct {
 
 /* Pull in the compiled keypad structures (sens, keypad_desc). */
 #include "compiled_keypad.h"
-#define KEYPAD_HEIGHT	(sizeof(keypad_desc)/sizeof(keypad_desc[0]))
-#define NUM_SENSE	(sizeof(sens)/sizeof(sens[0]))
+#define KEYPAD_HEIGHT	array_count(keypad_desc)
+#define NUM_SENSE	array_count(sens)
 
 static sens_t *current_sens = NULL;
 #if defined(XXX_DEBUG) || defined(YYY_DEBUG) || defined(ZZZ_DEBUG)
